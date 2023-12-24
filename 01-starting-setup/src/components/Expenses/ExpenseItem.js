@@ -21,21 +21,27 @@ const ExpenseItem = (props) =>{
     // const year = props.date.getFullYear();
     // const day = props.date.toLocaleString("ko-kr",{day:'2-digit'});
 
-    //useState는 리액트 훅으로 함수내부에 사용
-    //배열 첫번째는 관리되는 해당 값에 대한 포인터
-    //나중에 새 품명ㅇ을 설정할 때 호출할 함수입니다.
-    const [title,setTitle] = useState(props.title);
+    
     // let title =props.title;
     const clickHandler = () =>{
       //해당 함수의 뒤에 ()를 붙여서 기존 함수사용하는것처럼 안 쓰는이유는 페이지 로딩시점에
       //실행되어 버튼도 안 눌렀는데 이미 로딩되면서 실행되는 문제점이 생기기 때문
       //따라서 지목하기만 해둬도 리액트에서 해당 함수를 기억해두었다가 대신 함수를 실행해줌.
-      title='Updated!!';
+      // title='Updated!!';
       //그러나 위와같은 코드는 리액트에서 처음 함수단위로 리턴되면서 처음 셋팅한뒤에
       //재실행 되지는 않기때문에 타이틀문구가 변경이 안됨.
       //그걸 해결하기위한 방법으로 상태라는 동작원리가 존재함.
-      console.log('clicked!!');
+      console.log(title);
+
+      setTitle('updated!!');
     }
+
+    //useState는 리액트 훅으로 함수내부에 사용
+    //배열 첫번째는 관리되는 해당 값에 대한 포인터
+    //나중에 새 품명ㅇ을 설정할 때 호출할 함수입니다.
+    const [title,setTitle] = useState(props.title);
+
+    
 
   return (
     <Card className="expense-item">
