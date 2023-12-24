@@ -17,19 +17,19 @@ const App = () => {
     },
   ];
 // 반환하는 밑에랑 같은구조라고 생각하면됨 과거의 JSX 의 소스가 이런식이였음
-  return React.createElement(
-    'div',
-    {},
-    React.createElement('h2',{},'hi'),
-    React.createElement(Expense,{expenses: expenses})
-    );
+  // return React.createElement(
+  //   'div',
+  //   {},
+  //   React.createElement('h2',{},'hi'),
+  //   React.createElement(Expense,{expenses: expenses})
+  //   );
 
-  // return (
-  //   <div>
-  //       <h2>hi</h2>
-  //   <Expense expenses={expenses}/>
-  //   </div>
-  // );
+  return (
+    <div>
+        <h2>main</h2>
+    <Expense expenses={expenses}/>
+    </div>
+  );
 }
 
 //JSX란
