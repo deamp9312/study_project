@@ -1,5 +1,6 @@
 import React from 'react';
 import Expense from "./components/Expenses/Expense"
+import NewExpense from './components/NewExpense/NewExpense';
 //사용자 지정 컴포넌트는 대문자로 시작되는것을 규칙으로 함.
 const App = () => {
   const expenses = [
@@ -26,8 +27,8 @@ const App = () => {
 
   return (
     <div>
-        <h2>main</h2>
-    <Expense expenses={expenses}/>
+        <NewExpense/>
+      <Expense expenses={expenses}/>
     </div>
   );
 }
