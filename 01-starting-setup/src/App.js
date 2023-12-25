@@ -17,6 +17,11 @@ const App = () => {
       date: new Date(2023, 11, 12),
     },
   ];
+  const addExpenseHandler = expensesData=>{
+    console.log('in app.js');
+    console.log(expensesData);
+  }
+
 // 반환하는 밑에랑 같은구조라고 생각하면됨 과거의 JSX 의 소스가 이런식이였음
   // return React.createElement(
   //   'div',
@@ -27,7 +32,7 @@ const App = () => {
 
   return (
     <div>
-        <NewExpense/>
+        <NewExpense onAddExpense ={addExpenseHandler}/>
       <Expense expenses={expenses}/>
     </div>
   );
