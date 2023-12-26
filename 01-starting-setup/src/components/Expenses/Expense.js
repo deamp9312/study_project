@@ -7,16 +7,24 @@ import ExpensesFilter from './ExpensesFilter';
 
 const Expense = (props)=>{
   const [filteredYear ,setFilteredYear] = useState('2020');
-  const [filterInfoText ,setFilterInfoText] = useState('2019,2021 & 2022');
+  // const [filterInfoText ,setFilterInfoText] = useState('2019,2021 & 2022');
+
+  let filterInfoText ='2019,2021 & 2022';
+  if(filteredYear==='2019'){
+    filterInfoText= '2020,2021 & 2022';
+  }else{
+    filterInfoText = '2019,2021 & 2022';
+  }
+
 
   const filterChangeHandler = selectedYear =>{
     // console.log(selectedYear);
     setFilteredYear(selectedYear);
-    if(selectedYear==='2019'){
-      setFilterInfoText('2020,2021 & 2022');
-    }else{
-      setFilterInfoText('2019,2021 & 2022');
-    }
+    // if(selectedYear==='2019'){
+    //   setFilterInfoText('2020,2021 & 2022');
+    // }else{
+    //   setFilterInfoText('2019,2021 & 2022');
+    // }
     //
   };
   
