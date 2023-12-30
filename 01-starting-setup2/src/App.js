@@ -27,7 +27,18 @@ const concepts = [
   },
 ];
 
+function fetchTest(){
+  fetch("http://localhost:8080/test/a1")
+  .then(response => response.json())
+  .then(data => console.log(data));
+
+}
+
+
 function App() {
+  fetchTest();
+
+
   return (
     <div>
       <Header/>

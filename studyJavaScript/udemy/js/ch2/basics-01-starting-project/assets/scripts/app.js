@@ -18,7 +18,7 @@ let currentResult = defaultResult;
 
 function add(num1,num2){
     const result = num1+num2;
-    alert('result is ' + result);
+    return result;
 }
 
 let calculationDescription = `hihi ${currentResult}`;
@@ -28,4 +28,16 @@ let errorMessage = 'An error \n' + 'occurred!';
 //wite-space : pre로 설정하면 줄바꿈을 화면상에서 볼수있음.
 
 
-outputResult(currentResult,errorMessage)
+outputResult(currentResult,errorMessage);
+
+
+
+// test
+
+let userName = 'Max';
+function greetUser(name) {
+  let userName = name;
+  alert(userName);
+}
+userName = 'Manu';
+greetUser(userName);
