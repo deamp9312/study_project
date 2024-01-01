@@ -10,7 +10,21 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="assets/styles/app.css" />
-    
+    <!-- defer,async는 외부 스크립트에서만 사용 가능하다. -->
+    <!-- defer을 사용하면 스크립트를 다운로드중에도 html 구문 분석도 차단하지 않도록 해서
+          html 구문 분석을 계속 하고 구문 분석이 끝난 후에만 스크립트가 실행되는 것입니다.
+          따라서 미리 다운로드 하지만 다운로드가 끝나면 바로 스크립트를 실행하는 대신
+          스크립트가 다운로드 되고 html 구문 분석이 완료된 후에만 스크립트를 실행하도록 하는것-->
+    <script src="assets/scripts/vendor.js" defer></script>
+    <script src="assets/scripts/app.js" defer></script>
+    <!-- 하지만 가끔은 스크립트를 미리 로드하고 실행도 미리 해야 할 때가 있음 
+          html 코드에 의존하지 않아서 연결을 하지 않아도 될 경우, html 구문 분석의
+          완료 여부가 중요하지 않을때 사용 -> async 
+        defer과의 차이점은 html 구문과 별개로 스크립트가 다운로드 되면 바로 실행하는것.
+      그러나 import한 스크립트의 순서도 무시되므로 app.js가 vendor.js보다 먼저 실행될수
+    있으므로 순서 보장되는 defer을 사용할수도 있음-->
+    <!-- <script src="assets/scripts/vendor.js" async></script>
+    <script src="assets/scripts/app.js" async></script> -->
   </head>
 
   <body>
@@ -31,7 +45,6 @@
       <h2 id="current-calculation">0</h2>
       <h2>Result: <span id="current-result">0</span></h2>
     </section>
-    <script src="assets/scripts/vendor.js"></script>
-    <script src="assets/scripts/app.js"></script>
+
   </body>
 </html>

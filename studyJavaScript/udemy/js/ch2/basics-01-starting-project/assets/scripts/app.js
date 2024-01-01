@@ -12,19 +12,33 @@ const createAndWriteOutput = (operator,resultBeforeCalc,calcNumber) =>{
     outputResult(currentResult,calcDescription);
 }
 
+const writeToLog = (operationIdentifier,prevResult,operationNumber,newResult) =>{
+    const logEntry = {
+        operation : operationIdentifier,
+        prevResult  : prevResult,
+        number : operationNumber,
+        result : newResult
+    }
+    console.log(logEntry);
+    logEntries.push(operationNumber);
+    console.log(logEntries);
+
+}
+
 function add(){
     const enteredNumber = getUserNumberInput();
     const initialResult = currentResult;
     currentResult += enteredNumber;
     createAndWriteOutput('+',initialResult,enteredNumber);
-    logEntries.push(enteredNumber);
-    console.log(logEntries);
+    writeToLog('ADD',initialResult,enteredNumber,currentResult);
+    
 }
 const subtract = () =>{
     const enteredNumber = getUserNumberInput();
     const initialResult = currentResult;
     currentResult -= enteredNumber;
     createAndWriteOutput('-',initialResult,enteredNumber);
+    writeToLog('SUBTRACT',initialResult,enteredNumber,currentResult);
 }
 
 const multiply = () =>{
@@ -32,6 +46,7 @@ const multiply = () =>{
     const initialResult = currentResult;
     currentResult *= enteredNumber;
     createAndWriteOutput('*',initialResult,enteredNumber);
+    writeToLog('MLTIPLY',initialResult,enteredNumber,currentResult);
 }
 
 const divide = () =>{
@@ -39,7 +54,10 @@ const divide = () =>{
     const initialResult = currentResult;
     currentResult /=  enteredNumber;
     createAndWriteOutput('/',initialResult,enteredNumber);
+    writeToLog('DIVIDE',initialResult,enteredNumber,currentResult);
 }
+
+
 // currentResult = currentResult + 10;
 let errorMessage = 'An error \n' + 'occurred!';
 //wite-space : pre 로 설정하면 줄바꿈을 화면상에서 볼수있음.
