@@ -24,37 +24,51 @@ const writeToLog = (operationIdentifier,prevResult,operationNumber,newResult) =>
     console.log(logEntries);
 
 }
+/**
+ * performance 탭은 페이지 랜더링시 브라우저에서 실행하는 작업을
+ * 자세하게 알수있고 이를통해 다양한 작업이 가능함, 스크립트가 어떻게 
+ * 로드,분석 실행되었는지 방법을 이해할 수 있고 문제도 확인할수 잇음.
+ * 
+ */
 
-function add(){
+
+function calculateResult(calculationType) {
     const enteredNumber = getUserNumberInput();
     const initialResult = currentResult;
-    currentResult += enteredNumber;
-    createAndWriteOutput('+',initialResult,enteredNumber);
-    writeToLog('ADD',initialResult,enteredNumber,currentResult);
+    let mathOperator;
+    if(calculationType === 'ADD'){
+        currentResult += enteredNumber;
+        mathOperator = '+';
+    }else if(calculationType == 'SUBTRACT'){
+        currentResult -= enteredNumber;
+        mathOperator = '-';
+    }else if(calculationType == 'MLTIPLY'){
+        currentResult *= enteredNumber;
+        mathOperator = '*';
+    }else if(calculationType == 'DIVIDE'){
+        currentResult /= enteredNumber;
+        mathOperator = '/';
+    }else{
+        return;
+    }
+    createAndWriteOutput(mathOperator,initialResult,enteredNumber);
+    writeToLog(calculationType,initialResult,enteredNumber,currentResult);
+}
+
+function add(){
+    calculateResult('ADD');
     
 }
 const subtract = () =>{
-    const enteredNumber = getUserNumberInput();
-    const initialResult = currentResult;
-    currentResult -= enteredNumber;
-    createAndWriteOutput('-',initialResult,enteredNumber);
-    writeToLog('SUBTRACT',initialResult,enteredNumber,currentResult);
+    calculateResult('SUBTRACT');
 }
 
 const multiply = () =>{
-    const enteredNumber = getUserNumberInput();
-    const initialResult = currentResult;
-    currentResult *= enteredNumber;
-    createAndWriteOutput('*',initialResult,enteredNumber);
-    writeToLog('MLTIPLY',initialResult,enteredNumber,currentResult);
+    calculateResult('MLTIPLY');
 }
 
 const divide = () =>{
-    const enteredNumber = getUserNumberInput();
-    const initialResult = currentResult;
-    currentResult /=  enteredNumber;
-    createAndWriteOutput('/',initialResult,enteredNumber);
-    writeToLog('DIVIDE',initialResult,enteredNumber,currentResult);
+    calculateResult('DIVIDE');
 }
 
 
