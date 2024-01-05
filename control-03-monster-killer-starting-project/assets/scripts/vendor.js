@@ -59,3 +59,38 @@ function setPlayerHealth(health) {
  * var userName = "cho";
  * -------
  */
+
+
+/**
+ * 'use strict'
+ * 
+ */
+
+
+/**
+primitive Values > 
+Strings, Numbers, Booleans , Null, undefined, Symbol
+메모리의 스택에 저장되어짐
+카피가 일어날땐 주소값을 복사하지않고 값을 복사하여 원본값이 변경되어도 영향이 없음
+//
+Reference Values >
+all other objects
+힙에 저장되며 브라우저가 책임짐
+
+힙에 메모리 공간을 가리키는 주소를 저장(포인터)
+
+값 복사로 변경하기 위해서는 배열의경우
+ex)
+let ho = ['sp'];
+let coppyho = [...ho];
+
+ho.push('jo');
+
+console.log(coppyho);
+객체의 경우
+let dongchan = {age:30};
+let coppydong = {...dongchan};
+
+>위의 두 사례는 값을 복사하게됨
+
+ */
