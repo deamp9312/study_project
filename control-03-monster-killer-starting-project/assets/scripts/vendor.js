@@ -94,3 +94,25 @@ let coppydong = {...dongchan};
 >위의 두 사례는 값을 복사하게됨
 
  */
+
+function printMessage(){
+  const value = 'hi1';
+  console.log(value || 'coco1');
+}
+
+function addListener(){
+  logBtn.addEventListener('click',function(){
+    const value = 'hi2';
+    console.log(value || 'coco2');
+  })
+  logBtn.addEventListener('click',printMessage);
+}
+logBtn.addEventListener('click',addListener);
+
+/**
+ * switch문에서 햇갈리던거 정리
+ * case가 성공한뒤 break;문이 없으면 다음 case문도 실행하는데
+ * case가 성공을 하게되면 아래에 있는 case에 대해서는 조건문이 무기되기때문에
+ * 값이 일치하지 않는 경우에도 해당 case를 자동으로 실행되도록 설정이 되어있음
+ * 
+ */

@@ -3,10 +3,20 @@ const STRONG_ATTACK_VALUE = 17;
 const MONSTER_ATTACK_VALUE = 14;
 const HEAL_VALUE = 20;
 
-let choseMaxLife = 100;
+const MODE_ATTACK = 'ATTACK' // > 0
+const MODE_STRONG_ATTACK = 'STRONG_ATTACK'; //>1
+
+// let choseMaxLife = 100;
 let currentMonsterHealth = choseMaxLife;
 let currentPlayerHealth = choseMaxLife;
 let hasBonusLife = true;
+
+const enteredValue = prompt('최대 체력값을 입력해주세요.','100');
+
+let choseMaxLife = parseInt(enteredValue);
+if(isNaN(choseMaxLife) || choseMaxLife<=0){
+    choseMaxLife = 100;
+}
 
 adjustHealthBars(choseMaxLife);
 
@@ -34,9 +44,9 @@ function endRound(){
 
 function attackMonster(mode){
     let maxDamage;
-    if(mode === 'ATTACK'){
+    if(mode === MODE_ATTACK){
         maxDamage = ATTACK_VALUE;
-    }else if(mode === 'STRONG_ATTACK'){
+    }else if(mode === MODE_STRONG_ATTACK){
         maxDamage = STRONG_ATTACK_VALUE
     }
     const damage = dealMonsterDamage(maxDamage);
@@ -45,11 +55,11 @@ function attackMonster(mode){
 }
 
 function attackHandler(){
-    attackMonster('ATTACK');
+    attackMonster(MODE_ATTACK);
 }
 
 function strongAttackHandler(){
-    attackMonster('STRONG_ATTACK');
+    attackMonster(MODE_STRONG_ATTACK);
 }
 //변수 쉐도윙? 이게 뭐지
 function healPlayerHandler() {
