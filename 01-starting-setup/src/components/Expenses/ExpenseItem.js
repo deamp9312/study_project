@@ -9,6 +9,10 @@ import './ExpenseItem.css';
 import ExpenseDate from './ExpenseDate';
 import Card from '../UI/Card';
 
+//test function is ok
+function ExpenseItem(props){
+
+}
 const ExpenseItem = (props) =>{
 // function ExpenseItem({date,title,amount}) { //객체로 하나씩 끌어다가 사용도 가능
     // const expenseDate = new Date(2023,11,18);
