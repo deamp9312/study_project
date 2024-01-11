@@ -126,5 +126,5 @@ sumUp(showHandler,1,2,3,4,5,6,7,8,10,'123ㅇㄴ');
 substractUp(showHandler,1,2,3,4,5,6,7,8,10);
 
 
-combine(showHandler,'ADD',1,2,3,4,5,6,7,8,10,'123ㅇㄴ');
-combine(showHandler,'',1,2,3,4,5,6,7,8,10);
+combine(showHandler.bind(this,'결과임'),'ADD',1,2,3,4,5,6,7,8,10,'123ㅇㄴ');
+combine(showHandler.bind(this,'결과임'),'',1,2,3,4,5,6,7,8,10);
