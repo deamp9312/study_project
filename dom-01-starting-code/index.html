@@ -1,16 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>DOM Interaction</title>
+  <head>
   <script src="app.js" defer></script>
 </head>
 <body>
   <header>
-    <h1>Dive into the DOM!</h1>
+    <h1 id="main-title">Dive into the DOM!</h1>
   </header>
+  <ul>
+    <li class="list-item">Item 1</li>
+    <li class="list-item">Item 2</li>
+    <li class="list-item">Item 3</li>
+    
+  </ul>
   
 </body>
 </html>
+<script>
+  const h1 = document.getElementById('main-title')
+  console.dir(document.getElementById('main-title'))
+
+  document.getElementsByClassName('list-item')
+  // 위의방식은 올드버전
+  //querySelector은 첫번째 매칭된거 하나만 가져옴
+  document.querySelector('.list-item')
+  //전부를 가져올때 사용
+  document.querySelectorAll('.list-item')
+  //ul을 찾고 하위 li를 가져오는법
+  const ul = document.querySelector('ul')
+  ul.querySelector('li')
+  /**
+   * 요약: 노드 쿼리 메서드
+다음은 DOM 요소에 접근하는 다양한 방법에 대한 요약입니다 (참고: 요소 노드에 대해서만 쿼리할 수 있음).
+
+아래의 쿼리 메서드 외에도 문서 객체에 대한 아래의 특수 프로퍼티로 문서의 일부를 선택합니다.
+
+document.body =>  <body> 요소 노드를 선택합니다.
+
+document.head => <head> 요소 노드를 선택합니다.
+
+document.documentElement =>  <html> 요소 노드를 선택합니다.
+
+---
+
+쿼리 메서드
+
+---
+
+document.querySelector(<CSS selector>);
+모든 CSS 선택자(예: '#id이름', '.클래스명' 또는 'div p.클래스명')를 사용하여 DOM에서 처음(!) 일치하는 요소를 반환합니다. 일치하는 요소를 찾을 수 없는 경우에는 null 을 반환합니다.
+
+추가 정보:  https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector
+
+document.getElementById(<ID>);
+ID(# 없이 ID 이름만)를 가져와 이 ID를 가진 요소를 반환합니다. 동일한 ID가 페이지에서 두 번 이상 발생하지 않으므로 항상 정확히 하나의 요소를 반환합니다. 지정된 ID를 가진 요소를 찾을 수 없는 경우 null 을 반환합니다.
+
+추가 정보:  https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById
+
+document.querySelectorAll(<CSS selector>);
+모든 CSS 선택자(예: '#id이름', '.클래스명' 또는 'div p.클래스명')를 사용하여 DOM에서 일치하는 모든 요소를 정적(넌 라이브) NodeList로 반환합니다. 일치하는 요소를 찾을 수 없으면 빈 NodeList 를 반환합니다.
+
+추가 정보:  https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelectorAll
+
+document.getElementsByClassName(<CSS CLASS>);
+CSS 클래스 g(예: '클래스명')를 가져와 DOM에서 일치하는 요소의 라이브 HTMLCollection 을 반환합니다. 일치하는 요소를 찾을 수 없으면 빈 HTMLCollection을 반환합니다.
+
+추가 정보:  https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementsByClassName
+
+document.getElementsByTagName(<HTML TAG>);
+HTML 태그(예: 'p')를 가져와 DOM에서 일치하는 요소의 라이브 HTMLCollection을 반환합니다. 일치하는 요소를 찾을 수 없으면 빈 HTMLCollection을 반환합니다.
+
+추가 정보: https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagName
+
+일반적으로는 사용되지 않는 getElementsByName() 메서드도 있습니다(https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementsByName).
+   * 
+   * */
+</script>
