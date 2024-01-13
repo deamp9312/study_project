@@ -55,7 +55,7 @@ const body = document.body
  * ancestor : <em>의 조상은 P,div enrodla
  * 
  * document.body <- <div> 이 관계에서
- * => parentNode(조상들),parentElement(바로 윗 부모만) , closest()->직접 부모말고도 특정 css 쿼리와 일치하는 모든 조상을 사용하는 메서드
+ * => parentNode(조상),parentElement(바로 윗 부모만) , closest()->직접 부모말고도 특정 css 쿼리와 일치하는 모든 조상을 사용하는 메서드
  * 
  * <div> -> 하위 속성들
  * => childNodes (자손들) , children , querySelector(), ..
@@ -68,3 +68,27 @@ const body = document.body
  * => nextSibling, nextElementSibling
  * 
  * */
+
+//156 자식 노드 검색하기
+const ul = document.querySelector('ul')
+ul.children[1]; // 자식 요소 노드만을 선택할때
+ul.childNodes; // 빈 공백같은것도 포함된 모든 하위 자손 요소들 반환
+document.querySelector('li:last-of-type')
+
+ul.firstChild  //이경우 텍스트 노드임
+ul.firstElementChild
+
+//157. 부모 노드 검색하기
+const firstLi = document.querySelector('li')
+firstLi.parentNode
+//부모노드가 요소 노드여야 자식 노드를 가질수 있음(텍스트 노드는 자식 노드를 가질수없음)
+
+
+//160 dom 요소 스타일링
+const section = document.querySelector('section');
+const button = document.querySelector('button');
+button.addEventListener('click',()=>{ //버튼으로 특정요소 활성화 비활성화 조절하기
+    section.classList.toggle('visible')
+    section.classList.toggle('invisible')
+
+});
