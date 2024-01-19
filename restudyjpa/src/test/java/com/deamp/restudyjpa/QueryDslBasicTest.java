@@ -1,7 +1,6 @@
 package com.deamp.restudyjpa;
 
 import com.deamp.restudyjpa.entity.Member;
-import com.deamp.restudyjpa.entity.QMember;
 import com.deamp.restudyjpa.entity.Team;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.deamp.restudyjpa.entity.QMember.member;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -20,8 +20,10 @@ public class QueryDslBasicTest {
     @Autowired
     EntityManager em;
 
+    JPAQueryFactory queryFactory ;
     @BeforeEach
     public void before(){
+        queryFactory = new JPAQueryFactory(em);
         Team teamA = new Team("teamA");
         Team teamB = new Team("teamB");
         em.persist(teamA);
@@ -48,9 +50,9 @@ public class QueryDslBasicTest {
 
     @Test
     public void startQuerydsl(){
-        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
-        QMember member = QMember.member;
-        Member findMember = queryFactory.select(member)
+
+        Member findMember = queryFactory
+                .select(member)
                 .from(member)
                 .where(member.username.eq("member1"))
                 .fetchOne();
