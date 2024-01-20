@@ -39,3 +39,4 @@ out/
 
 ###queryDsl file
 /src/main/generated/
+/src/main/resources/allText/
