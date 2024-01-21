@@ -1,27 +1,40 @@
 package com.deamp.restudyjpa;
 
+import com.deamp.restudyjpa.dto.MemberDto;
+import com.deamp.restudyjpa.dto.UserDto;
 import com.deamp.restudyjpa.entity.Member;
+import com.deamp.restudyjpa.entity.QMember;
 import com.deamp.restudyjpa.entity.Team;
+import com.querydsl.core.NonUniqueResultException;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.PersistenceUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static com.deamp.restudyjpa.entity.QMember.member;
 import static com.deamp.restudyjpa.entity.QTeam.team;
+import static com.querydsl.jpa.JPAExpressions.select;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
+@Commit
 public class QueryDslBasicTest {
 
     @Autowired
@@ -47,34 +60,47 @@ public class QueryDslBasicTest {
 
     @Test
     public void startJPQL(){
-        //findMember1
-        String query = "select m from Member m where m.username = :username";
-        Member findMember = em.createQuery(query, Member.class)
-                .setParameter("username", "member1").getSingleResult();
 
-        assertThat(findMember.getUsername()).isEqualTo("member1");
+        try {
+            //findMember1
+            String query = "select m from Member m where m.username = :username";
+            Member findMember = em.createQuery(query, Member.class)
+                    .setParameter("username", "member1").getSingleResult();
+
+            assertThat(findMember.getUsername()).isEqualTo("member1");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     public void startQuerydsl(){
 
-        Member findMember = queryFactory
-                .select(member)
-                .from(member)
-                .where(member.username.eq("member1"))
-                .fetchOne();
-        assertThat(findMember.getUsername()).isEqualTo("member1");
+        try {
+            Member findMember = queryFactory
+                    .select(member)
+                    .from(member)
+                    .where(member.username.eq("member1"))
+                    .fetchOne();
+            assertThat(findMember.getUsername()).isEqualTo("member1");
+        } catch (NonUniqueResultException e) {
+            throw new RuntimeException(e);
+        }
     }
     @Test
     public void searchAndParam(){
-        Member findMember = queryFactory
-                .selectFrom(member)
-                .where(
-                        member.username.eq("member1"),
-                        member.age.eq(10)//,를 이용한 방식은 중간에 null이 존재하면 무시함.
-                )
-                .fetchOne();
-        assertThat(findMember.getUsername()).isEqualTo("member1");
+        try {
+            Member findMember = queryFactory
+                    .selectFrom(member)
+                    .where(
+                            member.username.eq("member1"),
+                            member.age.eq(10)//,를 이용한 방식은 중간에 null이 존재하면 무시함.
+                    )
+                    .fetchOne();
+            assertThat(findMember.getUsername()).isEqualTo("member1");
+        } catch (NonUniqueResultException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
@@ -261,8 +287,6 @@ public class QueryDslBasicTest {
         em.persist(new Member("teamB"));
         em.persist(new Member("teamC"));
 
-
-
         List<Tuple> result = queryFactory
                 .select(member, team)
                 .from(member)
@@ -274,8 +298,246 @@ public class QueryDslBasicTest {
         }
     }
 
+    @PersistenceUnit
+    EntityManagerFactory emf;
+
+    @Test
+    void fetchJoinNo() {
+        try {
+            em.flush();
+            em.clear();
+
+            Member findMember = queryFactory
+                    .selectFrom(member)
+                    .where(member.username.eq("member1"))
+                    .fetchOne();
+
+            boolean loaded = emf.getPersistenceUnitUtil().isLoaded(findMember.getTeam());
+            assertThat(loaded).as("패치 조인 미적용").isFalse();
+        } catch (NonUniqueResultException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Test
+    void fetchJoinUse() {
+        try {
+            em.flush();
+            em.clear();
+
+            Member findMember = queryFactory
+                    .selectFrom(member)
+                    .join(member.team,team).fetchJoin()
+                    .where(member.username.eq("member1"))
+                    .fetchOne();
+
+            boolean loaded = emf.getPersistenceUnitUtil().isLoaded(findMember.getTeam());
+            assertThat(loaded).as("패치 조인 미적용").isTrue();
+        } catch (NonUniqueResultException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    /**
+     * JPAExpressions
+     * 나이가 가장 많은 회원 조회
+     */
+
+    @Test
+    void subQuery(){
+        try {
+            QMember memberSub = new QMember("memberSub");
+
+            Member findMember = queryFactory
+                    .selectFrom(member)
+                    .where(member.age.eq(
+                            select(memberSub.age.max())
+                                    .from(memberSub)
+                    )).fetchOne();
+            assertThat(findMember.getAge()).isEqualTo(40);
+        } catch (NonUniqueResultException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @DisplayName("in쿼리 사용예시와 검증할때 사용하는법")
+    @Test
+    void subQueryIn(){
+        QMember memberSub = new QMember("memberSub");
+
+        List<Member> findMember = queryFactory
+                .selectFrom(member)
+                .where(member.age.in(
+                        select(memberSub.age)
+                                .from(memberSub)
+                )).fetch();
+        assertThat(findMember).extracting("age")
+                .containsExactly(10,20, 30, 40);
+
+    }
+
+    @Test
+    void basicCase() {
+        List<String> findMembers = queryFactory
+                .select(member.age
+                        .when(10).then("열살")
+                        .when(20).then("스무살")
+                        .otherwise("기타"))
+                .from(member)
+                .fetch();
+        for (String findMember : findMembers) {
+            System.out.println("findMember = " + findMember);
+        }
+    }
+
+    @Test
+    void complexCase() {
+        List<String> fetch = queryFactory
+                .select(new CaseBuilder()
+                        .when(member.age.between(0, 20)).then("스무살미만")
+                        .otherwise("기타"))
+                .from(member)
+                .fetch();
+        for (String s : fetch) {
+            System.out.println("s = " + s);
+        }
+
+    }
+
+    @Test
+    void concat(){
+        //username_age
+        List<String> fetch = queryFactory
+                .select(member.username.concat("_").concat(member.age.stringValue()))
+                .from(member)
+                .fetch();
+        for (String s : fetch) {
+            System.out.println("s = " + s);
+        }
+    }
+
+    @Test
+    void simpleProjection() {
+        List<String> result = queryFactory
+                .select(member.username)
+                .from(member)
+                .fetch();
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
+
+    @Test
+    void tupleProjection() {
+        List<Tuple> result = queryFactory
+                .select(member.username, member.age)
+                .from(member)
+                .fetch();
+        for (Tuple tuple : result) {
+            String userName = tuple.get(member.username);
+            Integer userAge = tuple.get(member.age);
+            System.out.println("userAge = " + userAge);
+            System.out.println("userName = " + userName);
+
+        }
+    }
+
+    @Test
+    void findDtoByJPQL(){
+        String qlString = "select new com.deamp.restudyjpa.dto.MemberDto(m.username,m.age) " +
+                "from Member m";
+        List<MemberDto> resultList = em.createQuery(qlString, MemberDto.class).getResultList();
+        for (MemberDto memberDto : resultList) {
+            System.out.println("memberDto = " + memberDto);
+        }
+
+    }
+
+    @Test
+    void findDtoBySeeter(){
+        //기본 생성자가 있어야됨.
+        //프로퍼티 접근방법 중 setter 방법
+
+        List<MemberDto> result = queryFactory
+                .select(Projections.bean(MemberDto.class,
+                        member.username,
+                        member.age))
+                .from(member)
+                .fetch();
+        for (MemberDto memberDto : result) {
+            System.out.println("memberDto = " + memberDto);
+        }
+
+    }
+
+    @Test
+    void findDtoByField(){
+        //위방식과 다르게 getter,Setter 말고 필드에 바로 값이 채워짐.
+
+        List<MemberDto> result = queryFactory
+                .select(Projections.fields(MemberDto.class,
+                        member.username,
+                        member.age))
+                .from(member)
+                .fetch();
+        for (MemberDto memberDto : result) {
+            System.out.println("memberDto = " + memberDto);
+        }
+
+    }
+
+    @Test
+    void findDtoByConstructor(){
+        //생성자의 매개변수type의 순서와 일치하는것을 불러옴
+        List<MemberDto> result = queryFactory
+                .select(Projections.constructor(MemberDto.class,
+                        member.username,
+                        member.age))
+                .from(member)
+                .fetch();
+        for (MemberDto memberDto : result) {
+            System.out.println("memberDto = " + memberDto);
+        }
+
+    }
 
 
+    @Test
+    void findUserDto(){
+        //생성자의 매개변수type의 순서와 일치하는것을 불러옴
+        List<UserDto> result = queryFactory
+                .select(Projections.fields(UserDto.class,
+                        member.username.as("name"), //엔티티의 변수명과 다를때 엘리어스를 이용하여 명칭을 맞쳐줘야됨
+                        member.age))
+                .from(member)
+                .fetch();
+        for (UserDto memberDto : result) {
+            System.out.println("UserDto = " + memberDto);
+        }
 
+    }
+
+
+    @Test
+    void findUserDtoSubQuery(){
+        QMember memeberSub = new QMember("memeberSub");
+        //생성자의 매개변수type의 순서와 일치하는것을 불러옴
+        List<UserDto> result = queryFactory
+                .select(Projections.fields(UserDto.class,
+                        ExpressionUtils.as(member.username,"name"),
+                        ExpressionUtils.as(JPAExpressions //서브쿼리의경우 ex유틸 사용해서 감싸서 사용해야됨
+                                .select(memeberSub.age.max())
+                                .from(memeberSub),"age")//subquery 결과를 dto의 age에 맞쳐서 넣어줌
+                ))
+                .from(member)
+                .fetch();
+        for (UserDto memberDto : result) {
+            System.out.println("UserDto = " + memberDto);
+        }
+
+    }
 
 }

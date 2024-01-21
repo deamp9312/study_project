@@ -3,7 +3,6 @@ package com.deamp.restudyjpa.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Entity
 @Getter
 @Setter
