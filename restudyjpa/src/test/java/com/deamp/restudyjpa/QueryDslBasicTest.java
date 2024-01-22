@@ -1,10 +1,12 @@
 package com.deamp.restudyjpa;
 
 import com.deamp.restudyjpa.dto.MemberDto;
+import com.deamp.restudyjpa.dto.QMemberDto;
 import com.deamp.restudyjpa.dto.UserDto;
 import com.deamp.restudyjpa.entity.Member;
 import com.deamp.restudyjpa.entity.QMember;
 import com.deamp.restudyjpa.entity.Team;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.NonUniqueResultException;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
@@ -12,6 +14,7 @@ import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -22,7 +25,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -34,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-@Commit
+//@Commit
 public class QueryDslBasicTest {
 
     @Autowired
@@ -538,6 +540,157 @@ public class QueryDslBasicTest {
             System.out.println("UserDto = " + memberDto);
         }
 
+    }
+//command + p > 가변변수값 뭐가 들어가는지 알수있는 단축키
+    @Test
+    void findDtoByQueryProjection() {//위에는 런타임에 사용자가 직접 호출시점에 에러가 발생되어 확인이 가능하지만
+        //아래의 Qdto를 사용하는 방식은 컴파일시점에 알수있음
+        List<MemberDto> result = queryFactory
+                .select(new QMemberDto(member.username, member.age))
+                .from(member)
+                .fetch();
+        for (MemberDto memberDto : result) {
+            System.out.println("memberDto = " + memberDto);
+        }
+    }
+
+    @DisplayName("동적쿼리 사용하는법")
+    @Test
+    void dynamicQuery_BooleanBuilder() {
+        String userNmaeParam = "member1";
+        Integer ageParam = 10;
+
+        List<Member> result = searchMember1(userNmaeParam, ageParam);
+
+        for (Member member1 : result) {
+            System.out.println("member1 = " + member1);
+        }
+
+    }
+
+    private List<Member> searchMember1(String userNmaeParam, Integer ageParam) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (userNmaeParam != null) {
+            builder.and(member.username.eq(userNmaeParam));
+        }
+        if (ageParam != null) {
+            builder.and(member.age.eq(ageParam));
+        }
+
+        return  queryFactory
+                .selectFrom(member)
+                .where(builder)
+                .fetch();
+
+    }
+
+    @DisplayName("동적쿼리 이게 더 깔끔함.")
+    @Test
+    void dynamicQuery_WhereParam() {
+        String userNmaeParam = "member1";
+        Integer ageParam = 10;
+
+        List<Member> result = searchMember2(userNmaeParam, ageParam);
+
+        for (Member member1 : result) {
+            System.out.println("member1 = " + member1);
+        }
+    }
+
+    private List<Member> searchMember2(String userNmaeParam, Integer ageParam) {
+        return queryFactory
+                .selectFrom(member)
+//                .where(usernameEq(userNmaeParam),ageEq(ageParam))
+                .where(allEq(userNmaeParam,ageParam))
+                .fetch();
+    }
+
+    private BooleanExpression usernameEq(String userNmaeParam) {
+        return userNmaeParam != null ?  member.username.eq(userNmaeParam):null;
+    }
+
+    private BooleanExpression ageEq(Integer ageParam) {
+        return ageParam != null ?  member.age.eq(ageParam):null;
+    }
+
+    private BooleanExpression allEq(String userName, Integer age) {
+        return usernameEq(userName).and(ageEq(age));
+    }
+
+    //벌크연산 ~
+
+    @Test
+    void bulkUpdate() {
+        /**
+         * 영속성 컨텍스트는 그대로인데 db의 값만 바뀜
+         * 근데 영속성 컨텍스트에 존재하는값을 db에서 가져오게 되면
+         * db보다 우선권한이 더 높은 영속성컨텍스트에서 값을 가져오게되고
+         * update이전의 값을 가져오게 되어 문제가 발생할수있음.
+         */
+        long count = queryFactory
+                .update(member)
+                .set(member.username, "비회원")
+                .where(member.age.lt(28))
+                .execute();
+        System.out.println("count = " + count);
+
+        //
+        em.flush();
+        em.clear();
+        //벌크 연산이 수행되면 걍 이거 수행하면 됨
+    }
+
+    @Test
+    void bulkAdd(){
+        long execute = queryFactory
+                .update(member)
+                .set(member.age, member.age.add(1))
+                .execute();
+        System.out.println("execute = " + execute);
+
+    }
+
+    @Test
+    void bulkDelte(){
+        long execute = queryFactory
+                .delete(member)
+                .where(member.age.gt(18))
+                .execute();
+        System.out.println("execute = " + execute);
+    }
+    //~ 벌크연산
+
+    //sql function 호출하는방법 ~
+    @Test
+    void sqlFunction(){
+        List<String> result = queryFactory
+                .select(
+                        Expressions.stringTemplate(
+                                "function('replace',{0},{1},{2})",
+                                member.username, "member", "M"))
+                .from(member)
+                .fetch();
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
+
+    @Test
+    void sqlFunction2(){
+        List<String> fetch = queryFactory
+                .select(member.username)
+                .from(member)
+//                .where(member.username.eq(
+//                        Expressions.stringTemplate(
+//                                "function('lower',{0})"
+//                                , member.username
+//                        )))
+                .where(member.username.eq(member.username.lower()))
+                .fetch();
+        for (String s : fetch) {
+            System.out.println("s = " + s);
+        }
     }
 
 }
