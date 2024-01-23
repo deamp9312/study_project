@@ -10,4 +10,9 @@ public class RestudyjpaApplication {
 		SpringApplication.run(RestudyjpaApplication.class, args);
 	}
 
+//
+//	@Bean
+//	JPAQueryFactory jpaQueryFactory(EntityManager em) {
+//		return new JPAQueryFactory(em);
+//	}
 }
