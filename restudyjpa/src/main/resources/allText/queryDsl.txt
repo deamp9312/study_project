@@ -1,0 +1,48 @@
+// 인텔리제이 사용시 더블클릭하면 포인터가 드래그 앤 드랍으로 인식하여 이동이 락걸리는 현상 해결방법
+settings > appearance > ui options > drag-and-drop check
+
+# 결과 조회
+fetch() : 리스트 조회 , 데이터 없을경우 빈 리스트 반환
+fetchOne() : 단 건 조회
+ - 결과가 없으면 : null
+ - 결과가 둘 이상이면 : com.querydsl.core.NonUniqueResultException
+fetchFirst() : limit(1).fetchOne()
+fetchResults() : 페이징 정보 포함, total count 쿼리 추가 실행
+=> 주의점 : 복잡한 쿼리의 count는 내부적으로 최적화 해서 수행될수도 있기때문에
+           직접 쿼리해서 사용해야됨.
+fetchCount() : count 쿼리로 변경해서 count 수 조회
+
+#조인 on절
+1.조인 대상 필터링
+2.연관관계 없는 엔티티 외부 조인
+
+
+#주의
+하이버네이트 5.1 부터 on을 사용해서 서로 관계가 없는 필드로 외부 조인하는 기능이 추가됨, 물론 내부 조인도 가능
+leftjoin() 부분에 일반 조인과 다르게 엔티티 하나만 들어간다.
+1.일반조인 : leftJoin(member.team, team)
+2.on조인 : from(member).leftJoin(team).on(xxx)
+
+
+#from 절의 서브쿼리 한계
+jpa jpql 서브쿼리의 한계점으로 From 절의 서브쿼리(인라인 뷰)는 지원하지 않는다.
+당연히 querydsl도 지원하지 않는다. 하이버네이트 구현체를 사용하면 select 절의 서브쿼리는 지원한다.
+Querydsl도 하이버네이트 구현체를 사용하면 select 절의 서브쿼리를 지원한다.
+
+from 절의 서브쿼리 해결방안
+1. 서브쿼리를 join으로 변경한다.
+2. 애플리케이션에서 쿼리를 2번 분리해서 실행한다.
+3. nativeSql을 사용한다.
+
+==책 추천
+sql antipatterns
+
+#벌크 연산시 주의 !!
+벌크연산시 db에 다이렉트로 수행되기때문에
+영속성컨텍스트와 값이 다를수 있음
+em.flush();
+em.clear();
+를 수행하여 두개의 값일 일치화 시켜주는 작업이 필요함.
+안하면 영속성 컨텍스트가 db의 값보다 우선되어 db에서 값 가져오다가 영속성에도 값이
+있으면 벌크연산 이전의 값을 반환할수도 있어 문제가 생길수 있음.
+
