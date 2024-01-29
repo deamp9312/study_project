@@ -1,0 +1,10 @@
+1. bean 이란?
+javaBeans - 재사용 가능한 컴포넌트 , 상태 (iv) , getter&setter , no-args constructor
+
+Servlet & JSP bean - MVC의 model,El,scope , JSP container 가 관리
+            -> 데이터를 전달 하는 역활 , jsp 컨테이너에 담아서 관리하는 객체를 정의
+
+#Bean - Spring Container 가 관리하는 객체
+Spring container - Bean 저장소 , bean을 저장 관리 (생성,소멸,연결) ex)@Autowired
+ - BeanFactory - Bean을 생성, 연결 등의 기본 기능을 정의 (인터페이스)
+ - ApplicationContext - BeanFactory를 확장해서 여러 기능을 추가 정의

@@ -20,7 +20,7 @@ class Car{
     @Value("red") String color;
     @Value("100") int oil;
 //    @Autowired     // byType
-//    @Qualifier("superEngine")
+//    @Qualifier("superEngine") //후보가 두개이상일때 여기에 적혀진것을 사용해라.
     @Resource(name="superEngine") // byName
     Engine engine;    // byType - 타입으로 먼저 검색, 여러개면 이름으로 검색. -  superEngine, turboEngine
     @Autowired Door[] doors;

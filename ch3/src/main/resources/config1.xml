@@ -15,5 +15,7 @@
     </bean>
     <bean id="engine" class="com.fastcampus.ch3.Engine"/>
     <bean id="door" class="com.fastcampus.ch3.Door" scope="prototype"/>
+    <!--    getBean 할때마다 새로운 객체를 반환하고 싶으면 scope를 prototype로 설정하면 된다.-->
+    <!--    <bean id="car" class="com.fastcampus.ch3.Car" scope="prototype"/>-->
 
 </beans>

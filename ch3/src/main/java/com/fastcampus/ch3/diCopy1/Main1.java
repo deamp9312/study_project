@@ -30,6 +30,6 @@ public class Main1 {
 
         Class clazz = Class.forName(p.getProperty("car"));
 
-        return (Car)clazz.newInstance();
+        return (Car)clazz.newInstance(); //객체 생성
     }
 }

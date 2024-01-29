@@ -1,6 +1,7 @@
 package com.fastcampus.ch3.diCopy3;
 
 import com.google.common.reflect.ClassPath;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -73,3 +74,9 @@ public class Main3 {
         System.out.println("engine = " + engine);
     }
 }
+
+
+/**
+ * @Autowired bytype -> instanof  map에 저장된 value값으로 조회
+ * @Resource  byName -> map에 저장된 key값으로 조회
+ */

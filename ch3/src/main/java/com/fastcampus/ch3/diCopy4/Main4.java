@@ -120,7 +120,7 @@ public class Main4 {
         // 수동으로 객체를 연결
 //        car.engine = engine;
 //        car.door = door;
-        
+
         System.out.println("car = " + car);
         System.out.println("engine = " + engine);
         System.out.println("door = " + door);
