@@ -1,5 +1,6 @@
 package com.deamp.restudyjpa.basic;
 
+import com.deamp.restudyjpa.entity.Team;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -99,4 +100,16 @@ public class BasicController {
         private String username;
         private int age;
     }
+
+   /* void BasicController() {
+        Team team = new Team();
+        team.setName("teamA");
+        em.persist(team);
+        Member member = new Member();
+        member.setAge(10);
+        em.persist(member);
+    }*/
 }
+
+
+

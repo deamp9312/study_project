@@ -1,9 +1,12 @@
 package com.deamp.restudyjpa.entity;
 
+import com.deamp.restudyjpa.jpaDefault.Order;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -39,6 +42,10 @@ public class Member {
     @GeneratedValue (strategy = GenerationType.SEQUENCE,generator = "member_seq")
     @Column(name = "member_id")
     private Long id;
+    private String name;
+    private String city;
+    private String street;
+    private String zipcode;
     private String username;
     private int age;
     @Enumerated(EnumType.STRING)
@@ -57,6 +64,11 @@ public class Member {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
+
+    @OneToMany(mappedBy = "member")
+    private List<Order> orders = new ArrayList<>();
+
+
     public Member(String username) {
         this(username, 0);
     }
@@ -72,6 +84,8 @@ public class Member {
     }
     public void changeTeam(Team team) {
         this.team = team;
+        //연관관계 편의 메서드를 이용해서 사용하기
         team.getMembers().add(this);
     }
+
 }
