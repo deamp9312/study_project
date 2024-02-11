@@ -1,5 +1,6 @@
 package com.deamp.restudyjpa.jpaDefault;
 
+import com.deamp.restudyjpa.jpaDefault.helloJpa.Item;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,9 +29,9 @@ public class OrderItem {
 //    @Column(name = "ITEM_ID")
 //    private Long itemId;
 
-    @ManyToOne
-    @JoinColumn(name = "ITEM_ID")
-    private Long itemId;
+//    @ManyToOne
+////    @JoinColumn(name = "ITEM_ID")
+//    private Long itemId;
 
     @ManyToOne
     @JoinColumn(name = "ITEM_ID")
