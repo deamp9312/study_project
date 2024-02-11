@@ -17,7 +17,8 @@ logging.level:
   org.hibernate.SQL: debug
 #  org.hibernate.type: trace
 
-
+init:
+  setting: true
 
 #  jdbc:h2:~/jpashop
 #  jdbc:h2:tcp://localhost/~/querydsl

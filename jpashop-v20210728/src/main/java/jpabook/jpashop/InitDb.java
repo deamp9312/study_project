@@ -3,6 +3,7 @@ package jpabook.jpashop;
 import jpabook.jpashop.domain.*;
 import jpabook.jpashop.domain.item.Book;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +25,16 @@ public class InitDb {
 
     private final InitService initService;
 
+    @Value("${init.setting}")
+    Boolean isReal;
+
     @PostConstruct
     public void init() {
-        initService.dbInit1();
-        initService.dbInit2();
+
+        if(isReal) {
+            initService.dbInit1();
+            initService.dbInit2();
+        }
     }
 
     @Component
