@@ -21,6 +21,7 @@ public class Member {
     private Long id;
 
     private String name;
+    private Integer age;
 
     @Embedded
     private Address address;
@@ -31,6 +32,11 @@ public class Member {
 
     public Member(String name) {
         this.name = name;
+    }
+
+    public Member(String name, Integer age) {
+        this.name = name;
+        this.age = age;
     }
 
     @Override

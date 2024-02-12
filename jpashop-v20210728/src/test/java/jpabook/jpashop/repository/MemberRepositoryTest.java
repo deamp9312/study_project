@@ -20,6 +20,7 @@ class MemberRepositoryTest {
     @Autowired
     MemberJpaRepository repository;
 
+    //동일한 명칭 한번에 변경 (shift + fn+ f6 )
     @Test
     void basicCRUD() {
         Member member1 = new Member("member1");
@@ -47,5 +48,16 @@ class MemberRepositoryTest {
 
         long nowCount = repository.count();
         assertThat(nowCount).isEqualTo(0);
+    }
+
+
+    @Test
+    void findUserName(){
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("AAA", 20);
+        repository.save(m1);
+        repository.save(m2);
+        List<Member> findMember = repository.findByNameAndAgeGreaterThan("AAA", 15);
+        assertThat(findMember.size()).isEqualTo(1);
     }
 }
