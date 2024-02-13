@@ -1,6 +1,7 @@
 package jpabook.jpashop.repository;
 
 import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.domain.Order;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,5 +103,23 @@ class MemberRepositoryTest {
         }
 
 
+    }
+
+
+    @Test
+    void findMemberFetchJoin() {
+        List<Member> all = repository.findMemberFetchJoin();
+        for (Member member : all) {
+            System.out.println("member = " + member);
+            System.out.println("member order= " + member.getOrders().get(0).getTotalPrice());
+        }
+    }
+
+    @Test
+    void findAllGraph(){
+        List<Member> all = repository.findAll();
+        for (Member member : all) {
+            System.out.println("member = " + member.getOrders().get(0).getOrderDate());
+        }
     }
 }

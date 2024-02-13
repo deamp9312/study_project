@@ -44,7 +44,7 @@ public class Member {
         return "Member{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", address=" + address +
+                ", age=" + age +
                 '}';
     }
 }

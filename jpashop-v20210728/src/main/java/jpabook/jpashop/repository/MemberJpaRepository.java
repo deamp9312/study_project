@@ -2,11 +2,13 @@ package jpabook.jpashop.repository;
 
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.dto.MemberDto;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.persistence.Entity;
 import java.util.Collection;
 import java.util.List;
 
@@ -42,5 +44,14 @@ public interface MemberJpaRepository extends JpaRepository<Member, Long> {
     @Modifying(clearAutomatically = true)
     @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
     int bulkAgePlus(@Param("age") int age);
+
+
+    //N+1 문제 해결법
+    @Query("select m from Member m left join fetch m.orders")
+    List<Member> findMemberFetchJoin();
+    //위와 비슷한 방법인데 어노테이션 사용하여 해결하는 방법
+    @Override
+    @EntityGraph(attributePaths = {"orders"})
+    List<Member> findAll();
 
 }

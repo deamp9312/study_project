@@ -16,7 +16,7 @@ spring:
 
 
 init:
-  setting: false
+  setting: true
 
 logging.level:
   org.hibernate.SQL: debug
