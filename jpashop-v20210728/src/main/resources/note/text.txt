@@ -1,0 +1,14 @@
+#Yml 운영환경 설정에 따른 설정을 위해 설정하는 방법
+
+1.vmOptions 아래와같이 설정
+-Dspring.profiles.active=dev
+
+2.yml 파일에 두가지중 하나로 설정해서 사용할것.
+spring:
+  profiles: dev
+#  config:
+#    activate:
+#      on-profile: dev
+
+
+
