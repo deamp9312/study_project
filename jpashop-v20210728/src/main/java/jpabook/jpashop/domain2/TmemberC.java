@@ -10,6 +10,7 @@ public class TmemberC {
 
     @Id
     @GeneratedValue
+    @Column(name = "teamC_id")
     private Long id;
 
     @Column(name = "username")
@@ -18,7 +19,5 @@ public class TmemberC {
     @OneToMany(mappedBy = "tmemberC")
     private List<TmemberA> tmemberA = new ArrayList<>();
 
-    private int age;
-    private String Cis;
 
 }

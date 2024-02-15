@@ -10,6 +10,7 @@ import java.util.List;
 public class TmemberB {
     @Id
     @GeneratedValue
+    @Column(name = "teamB_id")
     private Long id;
 
     @Column(name = "username")
@@ -18,7 +19,5 @@ public class TmemberB {
     @OneToMany(mappedBy = "tmemberB")
     private List<TmemberA> tmemberA = new ArrayList<>();
 
-    private int age;
-    private String Bis;
 
 }
