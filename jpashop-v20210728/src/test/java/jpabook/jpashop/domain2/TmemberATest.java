@@ -2,7 +2,7 @@ package jpabook.jpashop.domain2;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityManager;
@@ -26,8 +26,8 @@ class TmemberATest {
 
     @Test
     void testMembers() {
-        queryFactory.insert()
-        
+//        queryFactory.insert()
+
         QTmemberA qTmemberA = tmemberA;
         QTmemberB qTmemberB = tmemberB;
         QTmemberC qTmemberC = tmemberC;

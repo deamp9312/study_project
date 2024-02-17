@@ -1,9 +1,13 @@
 spring:
-  profiles: dev
-#  config:
-#    activate:
-#      on-profile: dev
+#  profiles: dev
+  config:
+    activate:
+      on-profile: dev
 
+#  profiles:
+#    dev:
+#      enavled: false
+#      ip: 192.168.1.100
   datasource:
     url: jdbc:h2:tcp://localhost/~/jpashop
     username: sa
