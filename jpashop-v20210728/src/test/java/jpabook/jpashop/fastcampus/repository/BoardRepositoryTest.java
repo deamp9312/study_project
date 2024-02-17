@@ -1,5 +1,7 @@
 package jpabook.jpashop.fastcampus.repository;
 
+import jpabook.jpashop.fastcampus.MyRuleException;
+import jpabook.jpashop.fastcampus.connumber.ExConst;
 import jpabook.jpashop.fastcampus.domain.Board;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -40,6 +42,18 @@ class BoardRepositoryTest {
             System.out.println("board = " + board);
         }
 
+        try {
+            repository.findById(3L)
+                    .orElseThrow(()-> new MyRuleException(ExConst.USER_ERROR.name()));
+
+
+        }catch (MyRuleException e){
+            System.out.println("예외발생");
+
+            System.out.println(ExConst.USER_ERROR.name());
+            System.out.println(ExConst.USER_ERROR.getErrorNumber());
+            e.logDetails();
+        }
     }
 
 }

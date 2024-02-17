@@ -38,8 +38,17 @@ class fastcamTest {
                 .build();
 
         System.out.println("user = " + user);
-
+        //저장
         em.persist(user);
+
+        em.flush();
+        em.clear();
+//        em.remove();
+
+        User findUser = em.find(User.class, user.getId());
+        System.out.println("findUser = " + findUser);
+
+
 
     }
 
