@@ -1,8 +1,11 @@
 package jpabook.jpashop.fastcampus.repository;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jpabook.jpashop.fastcampus.MyRuleException;
 import jpabook.jpashop.fastcampus.connumber.ExConst;
 import jpabook.jpashop.fastcampus.domain.Board;
+import jpabook.jpashop.fastcampus.domain.QBoard;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,10 +14,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Pageable;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static jpabook.jpashop.fastcampus.domain.QBoard.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -23,6 +28,14 @@ class BoardRepositoryTest {
     @Autowired
     BoardRepository repository;
 
+    private final EntityManager em;
+    private final JPAQueryFactory queryFactory;
+
+    @Autowired
+    BoardRepositoryTest(EntityManager em) {
+        this.em = em;
+        this.queryFactory = new JPAQueryFactory(em);
+    }
     @Test
     @Order(1)
     void BoardRepositoryTest(){
@@ -60,7 +73,7 @@ class BoardRepositoryTest {
         }
     }
 
-    @BeforeEach
+//    @BeforeEach
     public void initData(){
         for(int i=1;i<=100;i++){
             Board board = new Board();
@@ -93,6 +106,29 @@ class BoardRepositoryTest {
 //        listSort.add(new Sort.Order(Sort.Direction.ASC, "up_date"));
 //
 //        PageRequest pageRequest = PageRequest.of(0, 5, Sort.by(listSort));
+
+    }
+    @Test
+    void testBooleanBuilder(){
+
+        String searchBy = null;
+        String keyword = "T";
+        keyword = "%" + keyword + "%";
+
+        BooleanBuilder builder = new BooleanBuilder();
+        if ("T".equalsIgnoreCase(searchBy)) {
+            builder.and(board.title.like(keyword));
+        } else if ("C".equalsIgnoreCase(searchBy)) {
+            builder.and(board.content.like(keyword));
+        } else if ("TC".equalsIgnoreCase(searchBy)) {
+            builder.and(board.title.like(keyword).or(board.content.like(keyword)));
+        }
+
+        List<Board> fetch = queryFactory.selectFrom(board)
+                .where( board.bno.goe(190L),
+                        builder)
+                .fetch();
+        fetch.forEach(System.out::println);
 
     }
 
