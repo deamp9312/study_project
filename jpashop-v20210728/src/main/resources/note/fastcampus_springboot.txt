@@ -1,0 +1,63 @@
+ac > ApplicationContext > bean 빈 저장소
+pc > PersistenceContext > 엔티티 저장공간
+
+
+EntityManager 마다 pc를 가지고 있음
+
+entity (비영속 상태) >
+em.persist(entity) (영속 상태) >
+sql저장소 >
+em.flush() (sql 전송 > sql 쿼리만 전송하기때문에 반영은 안됨) >
+em.commit() (db 반영 + 전송)
+
+
+#jpa 쿼리 메서드
+
+1. JPQL : db테이블이 아닌 entity를 대상으로 쿼리를 작성 .sql과 유사
+>select b from Board b where b.title =?1
+2. 쿼리메서드(query method) : 메서드 이름으로 JPQL을 자동 생성
+> boardrepo.findByTitleAndWriter("title1","writer1");
+3.JPA Criteria
+4.QueryDsl : JPQL을 메서드의 조합으로 작성
+>queryFactory.selectFrom(board).where(board.title.eq("title1")).fetch();
+5.Native SQL : JPQL 대신 SQL을 직접 작성. 복잡한 sql 작성 가능
+-> @Query
+
+
+
+#JPQL#
+-생성방법
+자동생성 : 쿼리 메서드(spring Data) , jpa Criteria , querydsl
+수동생성 : em.createQuery() , @Query(JPQL,NativeSQL)
+
+-매개변수 지정방법
+매개변수 순서(default) - ?1 첫번째 ?2는 두번째
+@Query("SELECT b FROM Board b WHERE b.title =?1")
+List<Board> findByTitle(String title);
+
+-매개변수 이름 -@Param("이름") -> 생략하면 매개변수 이름으로 바인딩
+@Query("SELECT b FROM Board b WHERE b.title =?title")
+List<Board> findByTitle(@Param("title")String title);
+
+-@Query로 네이티브 쿼리(db에 종속된 쿼리) 작성
+@Query(value="SELECT * FROM BOARD",nativeQuery=true)
+List<Board> findAllBoard();
+> 전체 조회시 entity로 하는데 일부는 Object[] 배열을 반환타입으로 지정
+
+#페이징
+-@Query 붙은 메서드에 Pageable타입의 매개변수 추가
+@Query(value="SELECT * FROM BOARD",nativeQuery=true)
+List<Board> findTitleAndWriter(매개변수 가능 마지막에 Pageable 변수 추가, Pageable page);
+
+첫번째 페이지 , pageCount>5개씩 가져온다 , 정렬방법과 , 정렬하려는 컬럼값
+>Pageable pageable = PageRequest.of(page,size,Sort.Direction.DESC,"view_cnt);
+
+정렬이 두개이상일때
+List<Sort.Order> sorts = new ArrayList<>(); //정렬기준이 둘 이상일 때
+
+
+
+#주의#
+jpql은 대소문자를 구분하기 때문에 SELECT 이런식으로 대문자로 써야됨
+
+
