@@ -2,6 +2,7 @@ package jpabook.jpashop.domain2;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jpabook.jpashop.fastcampus.domain.QBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.List;
 import static jpabook.jpashop.domain2.QTmemberA.tmemberA;
 import static jpabook.jpashop.domain2.QTmemberB.tmemberB;
 import static jpabook.jpashop.domain2.QTmemberC.*;
+import static jpabook.jpashop.fastcampus.domain.QBoard.*;
 
 @SpringBootTest
 class TmemberATest {
@@ -66,4 +68,20 @@ class TmemberATest {
 
     }
 
+    /**
+     * private String title;
+     *     private String writer;
+     *     private String content;
+     *
+     *     private Long viewCnt;
+     *     @Temporal(value = TemporalType.TIMESTAMP)
+     *     private Date inDate;
+     *     @Temporal(value = TemporalType.TIMESTAMP)
+     *     private Date upDate;
+     */
+
+    @Test
+    void boardInsertTest(){
+
+    }
 }
