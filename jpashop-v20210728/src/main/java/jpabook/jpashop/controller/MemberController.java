@@ -1,9 +1,12 @@
 package jpabook.jpashop.controller;
 
+import jpabook.jpashop.config.CommonCodeService;
 import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.dto.Code;
 import jpabook.jpashop.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,12 +19,19 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
+    @Autowired
+    private final CommonCodeService service;
 
     private final MemberService memberService;
 
     @GetMapping("/members/new")
     public String createForm(Model model) {
         model.addAttribute("memberForm", new MemberForm());
+        List<Code> commonCodes = service.getCommonCodes();
+        for (Code commonCode : commonCodes) {
+            System.out.println("commonCode = " + commonCode);
+        }
+
         return "members/createMemberForm";
     }
 
