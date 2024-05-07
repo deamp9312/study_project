@@ -4,6 +4,7 @@ import jpabook.jpashop.config.CommonCodeService;
 import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.dto.Code;
+import jpabook.jpashop.dto.CodeRepository;
 import jpabook.jpashop.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class MemberController {
     private final CommonCodeService service;
 
     private final MemberService memberService;
+
+    @Autowired
+    private final CodeRepository codeRepository;
 
     @GetMapping("/members/new")
     public String createForm(Model model) {
@@ -56,6 +60,11 @@ public class MemberController {
     public String list(Model model) {
         List<Member> members = memberService.findMembers();
         model.addAttribute("members", members);
+
+        Code code = new Code();
+        code.setId(999);
+        code.setCode("B1");
+        codeRepository.save(code);
         return "members/memberList";
     }
 
