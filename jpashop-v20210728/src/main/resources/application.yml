@@ -11,7 +11,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
 #        show_sql: true
@@ -27,3 +27,7 @@ init:
 #  jdbc:h2:~/jpashop
 #  jdbc:h2:tcp://localhost/~/querydsl
 #   jdbc:h2:tcp://localhost/~/jpashop
+
+common:
+  code:
+    time: 6000
